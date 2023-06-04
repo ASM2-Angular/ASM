@@ -15,7 +15,7 @@ app.use(cors());
 app.use("/api", productRouter);
 app.use("/api", categoryRouter);
 app.use("/api", authRouter);
-app.use("/api",userRouter)
+app.use("/api", userRouter)
 // server
 
 mongoose.connect("mongodb://127.0.0.1:27017/Angular-ASM17305");
