@@ -1,4 +1,5 @@
 import User from "../models/user";
+import bcrypt from "bcryptjs";
 
 export const getAll = async (req, res) => {
     try {
@@ -44,14 +45,28 @@ export const getByID = async (req, res) => {
 }
 export const update = async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        return res.status(200).json({
-            message: "sua thanh cong"
-        })
+        const { password, ...rest } = req.body;
 
+        // Kiểm tra xem người dùng đã cung cấp mật khẩu mới hay không
+        if (password) {
+            // Mã hoá mật khẩu mới
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            // Thay đổi giá trị của trường password trong req.body thành mật khẩu đã mã hoá
+            req.body.password = hashedPassword;
+        }
+
+        // Thực hiện cập nhật và trả về kết quả
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+        return res.status(200).json({
+            message: "Cập nhật thành công",
+            ...user._doc,
+            password: undefined,
+        });
     } catch (error) {
         return res.status(500).json({
             message: error
         });
     }
-}
+};
