@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const categorySchema = new mongoose.Schema(
     {
         name: String,
+        img: String,
         products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
     },
     { timestamps: true, versionKey: false }
