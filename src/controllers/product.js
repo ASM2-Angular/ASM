@@ -88,6 +88,11 @@ export const update = async (req, res) => {
                 message: "Không tìm thấy sản phẩm",
             });
         }
+        await Category.findByIdAndUpdate(product.categoryId, {
+            $addToSet: {
+                products: product._id,
+            },
+        });
         return res.status(200).json({
             message: "Sản phẩm đã được cập nhật thành công",
             data: product,
