@@ -53,6 +53,7 @@ export const create = async (req, res) => {
 export const remove = async (req, res) => {
     try {
         const category = await Category.findByIdAndDelete(req.params.id);
+        await Product.deleteMany({ categoryId: category._id });
         return res.status(200).json({
             message: "Sản phẩm đã được xóa thành công",
             category,
